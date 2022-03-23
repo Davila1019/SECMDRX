@@ -34,7 +34,7 @@
      <widget class="QFrame" name="dropShadow">
       <property name="styleSheet">
        <string notr="true">QFrame{
-background-color: rgb(220, 207, 195);
+background-color: rgb(255, 255, 255);
 color: rgb(216, 219, 255);
 border-radius:10px;
 }</string>
@@ -63,11 +63,10 @@ border-radius:10px;
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">
-color: rgb(94, 34, 47);</string>
+        <string notr="true">color: rgb(21, 92, 140);</string>
        </property>
        <property name="text">
-        <string>&lt;strong&gt; FLDS&lt;/strong&gt;MDFR</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SEC&lt;/span&gt;MDRX&lt;span style=&quot; font-weight:600;&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -95,7 +94,7 @@ color: rgb(94, 34, 47);</string>
 color: rgb(159, 147, 140);</string>
        </property>
        <property name="text">
-        <string>&lt;strong&gt;LA&lt;/strong&gt; RIATA</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Simulador &lt;/span&gt;Estructuras Cristalinas&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -121,7 +120,8 @@ color: rgb(159, 147, 140);</string>
 
 }
 QProgressBar::chunk{
-background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.506, stop:0 rgba(86, 38, 67, 255), stop:1 rgba(156, 56, 78, 255));
+background-color:qlineargradient(spread:pad, x1:0.00568182, y1:0.523, x2:1, y2:0.522727, stop:0 rgba(34, 155, 180, 255), stop:1 rgba(20, 87, 137, 255))
+
 }</string>
        </property>
        <property name="value">
@@ -156,6 +156,10 @@ color: rgb(159, 147, 140);</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
+      <zorder>progressBar</zorder>
+      <zorder>label_Titulo</zorder>
+      <zorder>label_Descripcion</zorder>
+      <zorder>label_Cargando</zorder>
      </widget>
     </item>
    </layout>
