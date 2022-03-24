@@ -3,6 +3,7 @@ from PaginaInicio import *
 from PyQt6.QtWidgets import QDialog, QApplication, QSplashScreen, QMainWindow
 from PyQt6 import uic
 from PyQt6.QtCore import Qt, QTimer
+from Archivos import *
 
 
 
@@ -30,6 +31,8 @@ class Barra(QMainWindow):
 
             # SHOW MAIN WINDOW
             self.main = PaginaInicio()
+            archivo = Archivos()
+            self.p
             self.main.show()
 
             # CLOSE SPLASH SCREEN

@@ -35,7 +35,6 @@ class Ui_MainWindow(object):
         self.frame_2.setObjectName("frame_2")
         self.horizontalLayout.addWidget(self.frame)
         MainWindow.setCentralWidget(self.centralwidget)
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
