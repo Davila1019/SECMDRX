@@ -1,9 +1,9 @@
 import sys
-from PaginaInicio import *
+from tkinter import filedialog
+
 from PyQt6.QtWidgets import QDialog, QApplication, QSplashScreen, QMainWindow
 from PyQt6 import uic
 from PyQt6.QtCore import Qt, QTimer
-from Archivos import *
 
 
 
@@ -18,8 +18,11 @@ class Barra(QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.loading)
         self.timer.start(30)
+
+
+
     def loading(self):
-        global counter
+        global contador
 
         # SET VALUE TO PROGRESS BAR
         self.progressBar.setValue(self.contador)
@@ -30,9 +33,7 @@ class Barra(QMainWindow):
             self.timer.stop()
 
             # SHOW MAIN WINDOW
-            self.main = PaginaInicio()
-            archivo = Archivos()
-            self.p
+            self.main = PaginaProceso()
             self.main.show()
 
             # CLOSE SPLASH SCREEN
@@ -42,13 +43,26 @@ class Barra(QMainWindow):
         self.contador += 1
 
 
-class PaginaInicio(QMainWindow):
+class PaginaProceso(QMainWindow):
     def __init__(self):
         super(QMainWindow, self).__init__()
-        uic.loadUi("PaginaInicio.ui", self)
-        # self.setWindowFlag(Qt.FramelessWindowHint)
-        # self.setAttribute(Qt.WA_TranslucentBackground)
+        uic.loadUi("pagina_proceso.ui", self)
+        #------------------------- Paginas -----------------------------
+        # Pagina 1
+        self.btn_pag1.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.pagina_Interplanar))
+        # Pagina 2
+        self.btn_pag2.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.pagina_3d))
+        # Pagina 3
+        self.btn_pag3.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.pagina_otra))
+        # Boton conectado a Opciones para abrir archivos
+        self.btn_Opciones.clicked.connect(lambda: self.Abrir_archivos())
 
+    def Abrir_archivos(self):
+        abrir = filedialog.askopenfile(title="abrir", initialdir="C:/",
+        filetypes=(("Archivos de Texto", "*.txt"), ("Archivos pdf", "*.pdf"),
+        ("Hoja de cálculo Excel", "*.csv")))
+
+        self.label_4(print(abrir.read()))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -57,5 +71,4 @@ if __name__ == '__main__':
     Ventana.show()
     # Ventana.progress()
     Ventana.loading()
-
     sys.exit(app.exec())
