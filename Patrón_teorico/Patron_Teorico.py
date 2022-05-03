@@ -49,28 +49,32 @@ class PatronT:
             pprint.pprint(self._pteorico)
 
     def definir_pteorico(self):
-
         num_ang = len(self._angulos_2Theta)
-        while self.contador <= 90:
+        while self.contador < 90:
             index = 0
             while index < num_ang:
-                if self.contador != self._angulos_2Theta[index]:
-                    aux = random.randint(400, 800)
+                if  self._angulos_2Theta[index] - 0.019 < self.contador < self._angulos_2Theta[index] + 0.019:
+                    self._pteorico[self.contador] = self._intensidad[index]
+                    self.contador = self.contador + 0.019
+                    index = index + 1
+                    print('Aqui')
+                else:
+                    aux = random.randint(400, 600)
                     self._pteorico[self.contador] = aux
                     self.contador = self.contador + 0.019
-                    print(f'Aqui')
                     index = index + 1
-                else:
-                    self._pteorico[self.contador] = self._intensidad[self]
-                    self.contador = self.contador + 0.019
-                    print("Aqui estoy ciclado jejeje")
-                    index = index + 1
+
+
 p = PatronT()
 p.intensidad = 7144
 p.intensidad = 5046
-p.angulos = 36.777
-p.angulos = 47.56
-
+p.intensidad = 7656
+p.intensidad = 10156
+p.angulos = 36.7769
+p.angulos = 47.5689
+p.angulos = 79.1986
+p.angulos = 84.3046
 
 p.definir_pteorico()
-p.imprimir_pteorico()
+#p.imprimir_pteorico()
+p.validar_pteorico()
