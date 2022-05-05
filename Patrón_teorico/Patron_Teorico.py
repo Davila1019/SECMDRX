@@ -1,6 +1,6 @@
 import pprint
 import random
-import collections
+
 
 class PatronT:
     def __init__(self):
@@ -27,7 +27,7 @@ class PatronT:
 
     @angulos.setter
     def angulos(self, angulo):
-        print("@indicesM.setter class method called")
+        print("@angulos.setter class method called")
         self._angulos_2Theta.append(angulo)
 
     @property
@@ -48,21 +48,22 @@ class PatronT:
     def imprimir_pteorico(self):
             pprint.pprint(self._pteorico)
 
-    def definir_pteorico(self):
-        num_ang = len(self._angulos_2Theta)
+    def definir_pteorico(self): # definimos un supuesto patrón de difracción teorico
         while self.contador < 90:
-            index = 0
-            while index < num_ang:
-                if  self._angulos_2Theta[index] - 0.019 < self.contador < self._angulos_2Theta[index] + 0.019:
-                    self._pteorico[self.contador] = self._intensidad[index]
-                    self.contador = self.contador + 0.019
-                    index = index + 1
-                    print('Aqui')
+            aux = random.randint(400, 600)
+            self._pteorico[self.contador] = aux
+            self.contador = self.contador + 1
+
+    def validar_pteorico(self): #validamos la posicion del angulo e insertamos la intesidad
+        for angulo in self._pteorico.keys():
+            i=0
+            while i < len(self._angulos_2Theta):
+                if angulo == round(self._angulos_2Theta[i],0):
+                    self._pteorico[angulo] = self._intensidad[i]
+                    i += 1
                 else:
-                    aux = random.randint(400, 600)
-                    self._pteorico[self.contador] = aux
-                    self.contador = self.contador + 0.019
-                    index = index + 1
+                    i += 1
+
 
 
 p = PatronT()
@@ -73,8 +74,9 @@ p.intensidad = 10156
 p.angulos = 36.7769
 p.angulos = 47.5689
 p.angulos = 79.1986
-p.angulos = 84.3046
+p.angulos = 84.3056
 
 p.definir_pteorico()
-#p.imprimir_pteorico()
+p.imprimir_pteorico()
 p.validar_pteorico()
+p.imprimir_pteorico()
