@@ -74,7 +74,7 @@ class PatronT:
     def graficar_pteorico(self): #metódo para la graficación del difractograma
         plt.figure(figsize=(9, 6))
         plt.plot(self._pteorico.keys(),self._pteorico.values())
-        plt.ylabel('Intensidad()')
+        plt.ylabel('Intensidad(u.a.)')
         plt.xlabel('2'r'$\theta$(grados)')
         plt.suptitle('Difractograma R-X')
         self.agregar_indiceM(plt)
