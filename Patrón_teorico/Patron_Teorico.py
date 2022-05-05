@@ -1,6 +1,6 @@
 import pprint
 import random
-
+import matplotlib.pyplot as plt
 
 class PatronT:
     def __init__(self):
@@ -8,7 +8,7 @@ class PatronT:
         self._indices_miller = []
         self._angulos_2Theta = []
         self._intensidad = []
-        self.contador = 20.0
+        self.contador = 0.0
 
     @property
     def indicesM(self):
@@ -64,6 +64,21 @@ class PatronT:
                 else:
                     i += 1
 
+    def agregar_indiceM(self,plt):
+        for intensidad in self._pteorico.values():
+            i=0
+            while i < len(self._angulos_2Theta):
+                plt.text(self._angulos_2Theta[i],self._intensidad[i], f'{self._indices_miller[i]}')
+                i += 1
+
+    def graficar_pteorico(self): #metódo para la graficación del difractograma
+        plt.figure(figsize=(9, 6))
+        plt.plot(self._pteorico.keys(),self._pteorico.values())
+        plt.ylabel('Intensidad()')
+        plt.xlabel('2'r'$\theta$(grados)')
+        plt.suptitle('Difractograma R-X')
+        self.agregar_indiceM(plt)
+        plt.show()
 
 
 p = PatronT()
@@ -75,8 +90,12 @@ p.angulos = 36.7769
 p.angulos = 47.5689
 p.angulos = 79.1986
 p.angulos = 84.3056
-
+p.indicesM = 101
+p.indicesM = 111
+p.indicesM = 201
+p.indicesM = 301
 p.definir_pteorico()
 p.imprimir_pteorico()
 p.validar_pteorico()
 p.imprimir_pteorico()
+p.graficar_pteorico()
