@@ -9,7 +9,7 @@ class Archivos:
         self._data = []
 
     def abrir_Archivo(self):
-        archivo = filedialog.askopenfilename(title="abrir",
+        archivo = filedialog.askopenfilename(title="Abrir archivo",
                                         initialdir="C:Documents/",
                                         filetypes=(("Valores separados por comas", "*.csv"),))
         df = pd.read_csv(archivo)
