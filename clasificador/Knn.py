@@ -5,9 +5,9 @@ import numpy as np
 #       Implementación del algoritmo de clasificación supervisada Knn
 #
 #              (Clasificación mediante distancia euclidiana)
-#_distancias
+#
 #       Se determinó que el valor de K sería igual al total de elementos dentro de las diferentes
-#       listas de indices, esto para que la clasficación tenga una mayor eficacia.
+#       listas de indices, esto para que la clasficación tenga un mayor porcentaje de acertación.
 #
 #
 
@@ -37,7 +37,6 @@ class Knn:
 
     def classification(self, peaks:list):
         tam = len(peaks)
-        print(peaks)
         aux = 0
         if tam == 5:
             aux = 0
@@ -68,7 +67,6 @@ class Knn:
             aux = math.sqrt(aux)
             self._distances[self._labels[3]] = aux
         else:
-            print(self._labels[4])
             return self._labels[4]
 
         return self.set_Class()
@@ -86,5 +84,4 @@ class Knn:
                 clas = list(self._distances.keys())[list(self._distances.values()).index(short_dist)]
                 if clas in self._result:
                     res[clas] = self._result.get(clas)
-        print(res)
         return res
