@@ -3,7 +3,8 @@ import tkinter as tk
 
 from matplotlib.figure import Figure
 
-from patron_difraccion.Patron_U import Patron_U
+#from patron_difraccion.Patron_U import Patron_U
+from indice.Indices_Miller import Indice
 from  matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 class ChartWindow():
     def __init__(self):
@@ -15,21 +16,26 @@ class ChartWindow():
         self._root.config(bg="#249794")
         self._root.title('SECMDRX')
         #self._root.overrideredirect(True)
-        self._root.iconbitmap("../resourses/images/logo-ipn.ico")
+        #self._root.iconbitmap("../resourses/images/logo-ipn.ico")
         #clase Patron Usuario
-        self._difraction = Patron_U()
-        self._difraction.load_data() #abrir archivo
-        self._difraction.detectar_Picos()
+        # self._difraction = Patron_U()
+        # self._difraction.load_data() #abrir archivo
+        # self._difraction.detectar_Picos()
 
         #Clase isma
-        self._difraction.final_ind
+        # self._difraction.final_ind
+        self._indice=Indice()
+        self._indice.crear_indices()
+
+
 
 
         self._root.rowconfigure(0,weight=2)
         self._root.columnconfigure(0,weight=1)
 
-        self.createMenu() # Creamos la barra de menú
+        self.createMenu() # Creamos la barra de menu
         self.createWidgets()
+
 
         self._root.mainloop()
 
@@ -37,7 +43,7 @@ class ChartWindow():
         menubar = Menu(self._root)
 
         filemenu = Menu(menubar,tearoff=0)
-        filemenu.add_command(label="Nueva simulación")
+        filemenu.add_command(label="Nueva simulacion")
         filemenu.add_command(label="Crear reporte")
         filemenu.add_separator()
         filemenu.add_command(label="Salir",command=self._root.quit)
@@ -51,18 +57,24 @@ class ChartWindow():
         menubar.add_cascade(label="Ayuda", menu=helpmenu)
 
         self._root.config(menu=menubar)
-
-
-
     def createWidgets(self):
 
-        canvas = FigureCanvasTkAgg(self._difraction.plt, self._root)
-        canvas.draw()
-        canvas.get_tk_widget().grid(row=0, column=0, rowspan=2)
+        # canvas = FigureCanvasTkAgg(self._difraction.plt, self._root)
+        # canvas.draw()
+        # canvas.get_tk_widget().grid(row=0, column=0, rowspan=2)
 
-        toolbarFrame = Frame(master=self._root)
-        toolbarFrame.grid(row=2,column=0)
-        toolbar = NavigationToolbar2Tk(canvas,toolbarFrame)
+        canvas2 = FigureCanvasTkAgg(self._indice.plt, self._root)
+        canvas2.draw()
+        canvas2.get_tk_widget().grid(row=0, column=1, rowspan=2)
+
+        toolbarFrame2 = Frame(master=self._root)
+        toolbarFrame2.grid(row=2, column=1)
+        toolbar2 = NavigationToolbar2Tk(canvas2, toolbarFrame2)
+
+        # toolbarFrame = Frame(master=self._root)
+        # toolbarFrame.grid(row=2,column=0)
+        # toolbar = NavigationToolbar2Tk(canvas,toolbarFrame)
+
 
 
 
