@@ -12,8 +12,7 @@ class Interfaz2:
         self.int2 = Tk()
 
         self.int2.overrideredirect(True)  # Quitar barra de título
-        # int3.geometry('400x200')
-        self.width_of_window = 200
+        self.width_of_window = 250
         self.height_of_window = 150
         self.screen_width = self.int2.winfo_screenwidth()
         self.screen_height = self.int2.winfo_screenheight()
@@ -29,20 +28,30 @@ class Interfaz2:
         self.canvas1.create_image(0, 0, image=self.bg,
                                   anchor="nw")
         self.var = IntVar()
+        bg_azul = '#249794' #Azul
+        common_fg = '#ffffff'
 
-        self.titulo = ttk.Label(self.int2, text="Datos con los que cuenta: ")
-        self.btn = ttk.Radiobutton(self.int2, text="Patrón de difracción", variable=self.var, value=1,
-                                   command=self.Evento_Seleccion)
-        self.btn2 = ttk.Radiobutton(self.int2, text="Picos de difracción", variable=self.var, value=2,
+        self.titulo = tk.Label(self.int2,font="black", text="Datos con los que cuenta: ", background="white", foreground="#249794")
+
+        self.btn = tk.Radiobutton(self.int2, font="black",text="Patrón de difracción",fg=bg_azul, bg=common_fg,
+                                   activebackground=common_fg, activeforeground=bg_azul, selectcolor=common_fg,
+                                   variable=self.var, value=1,command=self.Evento_Seleccion)
+
+        self.btn2 = tk.Radiobutton(self.int2, font="black",text="Picos de difracción",fg=bg_azul, bg=common_fg,
+                                   activebackground=common_fg, activeforeground=bg_azul, selectcolor=common_fg, variable=self.var, value=2,
                                     command=self.Evento_Seleccion)
-        self.btn_aceptar = ttk.Button(self.int2, text="Aceptar", command=self.Evento_Aceptar)
-        self.btn_cancelar = ttk.Button(self.int2, text="Cancelar", command=exit)
 
+        self.btn_aceptar = tk.Button(self.int2, text="Aceptar", command=self.Evento_Aceptar,width=12, height=1,
+                                     background="#249794", foreground="white")
 
+        self.btn_cancelar = tk.Button(self.int2, text="Cancelar", command=exit,width=12, height=1,
+                                     background="#249794", foreground="white")
+
+        # rad_button.place(x=10, y=10)
         self.titulo.place(x=10, y=10)
         self.btn.place(x=10, y=40)
         self.btn2.place(x=10, y=80)
-        self.btn_aceptar.place(x=110, y=120)
+        self.btn_aceptar.place(x=150, y=120)
         self.btn_cancelar.place(x=10, y=120)
 
         self.int2.mainloop()
@@ -71,8 +80,8 @@ class Interfaz2:
             l1.place(x=80, y=100)
             q.mainloop()
             return messagebox.showinfo('PythonGuides', 'Elegiste interfaz patrón de difracción')
-
         elif self.datos == 2:
+
             return messagebox.showinfo('PythonGuides', 'Elegiste interfaz picos de difracción')
         else:
             return messagebox.showinfo('PythonGuides', 'No se eligió ninguna interfaz')
