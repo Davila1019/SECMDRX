@@ -1,3 +1,4 @@
+from msilib.schema import RadioButton
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.figure import Figure
@@ -6,18 +7,13 @@ from indice.Cubo import Cubo
 
 class Indice:
     def __init__(self):
-        # self.fig = plt.figure()
-        # self.Axes3D = self.fig.add_subplot(111, projection='3d')
-        #
-        # self.ObjetoCubo = Cubo()
-        # self.ObjetoCubo.cubo1(self.fig, self.Axes3D)
         self.plt = None
         self.plt_dif = None
         self.datos = 0
         # si, si ,si ,si ,si, si ,si, si, si ,si, si,  si,si, si,si,
         # 111,222,311,113,310,110,101,221,102,103,200,220,001,002,011,022
         # "110","101","221","102","103","200","220","001","002","011","022"
-        self.indice1 = ["111","222","311","113","310"]
+        self.indice1 = ["111","022"]
 
     def plot_chart(self):
         # self.fig = plt.figure()
@@ -31,12 +27,22 @@ class Indice:
         self.plt_dif.set_xlim(0, 1)
         self.plt_dif.set_ylim(0, 1)
 
+    def Evento_Seleccion(self):
+        elige = self.var.get()
+        if elige == 1:
+            print("Elección 1")
+        else:
+            print("Debe elegir una opción")
+        pass
+        return elige
+
     def crear_indices(self):
         # -----------------------------------------------------------------------
         self.plot_chart()
         for self.datos in self.indice1:
             if self.datos == "111":  # 111
                 # pass
+
                 x = np.array([[1, 0, 0, 1]])
                 y = np.array([[0, 1, 0, 0]])
                 z = np.array([[0, 0, 1, 0]])
@@ -130,22 +136,18 @@ class Indice:
                 self.plot_vector3dXY3([x, z], color='r')
                 self.plot_vector3dXY3([x1, z1], color='g')
             elif self.datos == "200":
-                # for i in zip(a):
-                #     print(f'{i[0]}')
-                #     self.plot_vector3dX([i[0]])
+                # Decirle a Lalo que se debe cambiar
+                x = np.array([1 / 2, 1, 0])
+                y = np.array([1/2, 0, 0])
+                z1= np.array([1 / 2, 1, 1])
 
-                x = np.array([1, 1 / 2, 0])
-                y = np.array([1, 1 / 2, 1])
-                z = np.array([0, 1 / 2, 0])
-                w = np.array([0, 1 / 2, 1])
-
-                # w = np.array([1/2, 1/2, 1])
-                self.plot_vector3dZ([x, y, z, w], color='b')
-                self.plot_vector3dX([x, y, z, w], color='b')
+                x1 = np.array([1 / 2, 0, 1])
+                z = np.array([1 / 2, 0, 1])
+                self.plot_vector3dZ([x, y, z, z1,x1], color='b')
+                self.plot_vector3dY([x, y, z, z1,x1], color='b')
             elif self.datos == "220":
                 x = np.array([1 / 2, 0, 0])
                 y = np.array([0, 1 / 2, 0])
-                # z = np.array([1/2, 1/2, 0])
 
                 x1 = np.array([1 / 2, 0, 1])
                 y1 = np.array([0, 1 / 2, 1])
@@ -198,42 +200,54 @@ class Indice:
                 self.plot_vector3dY([x, y, z, w], color='b')
             elif self.datos == "011":
                 y = np.array([0, 0, 1])
-                # y = np.array([1, 0, 0])
-                z = np.array([0, 1, 1])
+                x = np.array([0, 1, 0])
 
-                y1 = np.array([1, 0, 0])
-                # y1 = np.array([0, 1, 0])
+                y1 = np.array([1, 0, 1])
                 z1 = np.array([1, 1, 0])
-
-                # z = np.array([1 / 2, 1 / 2, 1])
                 plt.ylabel("Y")
                 plt.xlabel("X")
-                # self.plot_vector3dXY([x, z], color='b')
-                # self.plot_vector3dZ([x,z], color='b')
-                # self.plot_vector3dZ([x1, z1], color='g')
-                self.plot_vector3dXZ3([y, z], color='r')
-                self.plot_vector3dXZ3([y1, z1], color='g')
-                self.plot_vector3dXY3([y, z], color='r')
-                self.plot_vector3dXY3([y1, z1], color='g')
+                self.plot_vector3dXZ7([y, x], color='r')
+                self.plot_vector3dXZ7([y1, z1], color='g')
+
+                self.plot_vector3dXY4([y, x], color='r')
+                self.plot_vector3dXY4([y1,z1], color='r')
+
             elif self.datos == "022":
                 y = np.array([0, 0, 1 / 2])
-                z = np.array([0, 1, 1 / 2])
+                z = np.array([1, 0, 1 / 2])
 
-                y1 = np.array([1 / 2, 0, 0])
-                z1 = np.array([1 / 2, 1, 0])
+                y1 = np.array([1, 1/2, 0])
+                z1 = np.array([0, 1/2, 0])
+
                 self.plot_vector3dXZ6([y, z], color='r')
                 self.plot_vector3dXZ6([y1, z1], color='g')
-                self.plot_vector3dXY3([y, z], color='r')
-                self.plot_vector3dXY3([y1, z1], color='g')
+                self.plot_vector3dXY4([y, z], color='r')
+                self.plot_vector3dXY4([y1, z1], color='r')
+
 
         # plt.show()
 
+    def plot_vector3dXY4(self, vector_3d, **kwords):
+        x_coords, y_coords, z_coords = zip(*vector_3d)
+        self.plt_dif.scatter(x_coords, y_coords, z_coords, **kwords)
+        for v in vector_3d:
+            x, y, z = v
+            self.plt_dif.plot([y, x], [y,y], [z, z],
+                              linestyle='solid', marker=' ', color= "green")
+
+    def plot_vector3dXZ7(self, vector_3d, **kwords):
+        x_coords, y_coords, z_coords = zip(*vector_3d)
+        self.plt_dif.scatter(x_coords, y_coords, z_coords, **kwords)
+        for v in vector_3d:
+            x, y, z = v
+            self.plt_dif.plot([x, x], [3/4, y], [1 / 4, z], color='purple',
+                              linestyle='solid', marker=' ')
     def plot_vector3dXZ6(self, vector_3d, **kwords):
         x_coords, y_coords, z_coords = zip(*vector_3d)
         self.plt_dif.scatter(x_coords, y_coords, z_coords, **kwords)
         for v in vector_3d:
             x, y, z = v
-            self.plt_dif.plot([1 / 4, x], [y, y], [1 / 4, z], color='purple',
+            self.plt_dif.plot([x, x], [1 / 4, y], [1 / 4, z], color='purple',
                               linestyle='solid', marker=' ')
 
     def plot_vector3dXZ5(self, vector_3d, **kwords):
