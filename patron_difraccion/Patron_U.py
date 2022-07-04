@@ -1,82 +1,86 @@
-import sys
+import errno
+
+import os
+from tkinter import messagebox as mb
+
+import pandas as pd
+from matplotlib.figure import Figure
+from scipy.signal import find_peaks, savgol_filter
+
 from archivos.Archivos import Archivos
 from clasificador.Knn import Knn
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
-from datetime import datetime,date
-from tkinter import messagebox as mb
-import errno
-from scipy.signal import find_peaks, savgol_filter
-import os
+
 
 class Patron_U:
     def __init__(self):
-        self._angle_2Theta = []
-        self._intensity = []
-        self._index_peaks = []
-        self._final_peaks = []
-        self._final_ind = [] #Lista que contiene los indices de miller
-        self._class = {}
-        self.name_class =''
-        self._angle_peaks = []
+        self._angulos_2Theta = []
+        self._intensidades = []
+        self._indice_picos = []
+        self._picos_finales = []
+        self._indices_finales = []  # Lista que contiene los indices de miller
+        self._clase = {}
+        self.nombre_clase = ''
+        self._angulos_dpicos = []
         self.plt = None
         self.plt_dif = None
-        self._data_suav = []
+        self._datos_suavizados = []
+        self.path = ''
 
     @property
-    def angle(self):
-        print("@propiety class Patron_U method called")
-        return self._angle_2Theta
+    def angulos(self):
+        return self._angulos_2Theta
 
-    @angle.setter
-    def angle(self, angulo):
-        print("@angulos.setter class method called")
-        self._angle_2Theta.append(angulo)
+    @property
+    def angulos_dpicos(self):
+        return self._angulos_dpicos
+
+    @angulos.setter
+    def angulos(self, angulo):
+        self._angulos_2Theta.append(angulo)
 
     @property
     def intensidad(self):
-        print("@propiety class Patron_U method called")
-        return self._intensity
+        return self._intensidades
 
     @property
-    def final_ind(self):
-        print("@propiety class Patron_U method called, get indices Miller")
-        return self._final_ind
+    def indices_finales(self):
+        return self._indices_finales
 
     @intensidad.setter
     def intensidad(self, intensidad):
-        print("@intencidad.setter class method called")
-        self._intensity.append(intensidad)
+        self._intensidades.append(intensidad)
 
-    def load_data(self):
+    def cargar_datos(self):
         a = Archivos()
         try:
             data = a.abrir_Archivo()
+            self.path = a.archivo
         except KeyError:
             mb.showwarning("Formato invalido", "El archivo seleccionado no tiene el formato valido")
-            return self.load_data()
+            return self.cargar_datos()
         except FileNotFoundError:
-            sys.exit()
-        self._angle_2Theta = data[0]
-        self._intensity = data[1]
+            pass
+        try:
+            self._angulos_2Theta = data[0]
+            self._intensidades = data[1]
+        except UnboundLocalError:
+            return 0
 
-    def add_peaks(self,plt):
+    def agregar_picos(self, plt):
         i = 0
-        while i < len(self._data_suav):
+        while i < len(self._datos_suavizados):
             j = 0
-            while j < len(self._index_peaks):
-                if (i == self._index_peaks[j]):
-                    plt.text(self._angle_2Theta[i] + 1, self._intensity[i] + 50, f'({self._final_ind[j]})', rotation=45)
+            while j < len(self._indice_picos):
+                if (i == self._indice_picos[j]):
+                    plt.text(self._angulos_2Theta[i] + 1, self._intensidades[i] + 50, f'({self._indices_finales[j]})',
+                             rotation=45)
                     j += 1
                 else:
                     j += 1
             i += 1
-        self.save_fig()
 
-
-    def smooth_pattern(self):
-        data = list(self._intensity)
+    def suavizar_patrón(self):
+        data = list(self._intensidades)
         suav_1 = savgol_filter(data, 51, 1)  # Filtro de savitzky–golay X6 (suavizado de señal)
         suav_2 = savgol_filter(suav_1, 51, 1)
         suav_3 = savgol_filter(suav_2, 51, 1)
@@ -87,54 +91,49 @@ class Patron_U:
 
     def detectar_Picos(self):
         clas = Knn()
-        clas.fit()
-        self._data_suav = self.smooth_pattern()
-        dat_p = pd.DataFrame(self._data_suav)
+        clas.entrenar()
+        self._datos_suavizados = self.suavizar_patrón()
+        dat_p = pd.DataFrame(self._datos_suavizados)
         des = list(dat_p.std())
-        found_peaks = find_peaks(self._data_suav, height=(des[0]))
-        self._index_peaks = list(found_peaks.__getitem__(0))
-        self.get_angles_peaks(self._index_peaks)
-        self._class = clas.classification(self._angle_peaks)
-        self._final_ind = list(self._class.values())[0]
+        picos_encontrados = find_peaks(self._datos_suavizados, height=(des[0]))
+        self._indice_picos = list(picos_encontrados.__getitem__(0))
+        self.get_angles_peaks(self._indice_picos)
+        self._clase = clas.clasificar(self._angulos_dpicos)
+        self._indices_finales = list(self._clase.values())[0]
+        self.nombre_clase = list(self._clase.keys())[0]
         self.plot_chart()
-        self.name_class = list(self._class.keys())[0]
-        #self.plt.show()
+
+        # self.plt.show()
 
     def get_angles_peaks(self, index_peaks: list):
         tam = len(index_peaks)
         i = 0
         while i < tam:
-            self._angle_peaks.append(self._angle_2Theta[self._index_peaks[i]])
+            self._angulos_dpicos.append(self._angulos_2Theta[self._indice_picos[i]])
             i += 1
+
     # Función para graficar (pruebas unitarias)
-
     def plot_chart(self):
-        self.plt = Figure(figsize=(6, 6), dpi=100)
-
+        self.plt = Figure(figsize=(4, 4), dpi=100)
         self.plt_dif = self.plt.add_subplot(111)
-        self.plt_dif.plot(self._angle_2Theta, self._intensity, c='g')
-        self.add_peaks(self.plt_dif)
+        self.plt_dif.plot(self._angulos_2Theta, self._intensidades, c='maroon')
+        self.agregar_picos(self.plt_dif)
         self.plt_dif.set_ylabel('Intensidad(u.a.)')
         self.plt_dif.set_xlabel('2'r'$\theta$(grados)')
-        metal = list(self._class.keys())[0]
-        self.plt_dif.set_title(metal)
-
+        self.plt_dif.set_title(self.nombre_clase)
+        self.save_fig()
 
     def save_fig(self):
         try:
-            os.makedirs('C:/SECMDRX/frames')
+            os.makedirs('C:/SECMDRX/reports/frames')
         except OSError as e:
-                if e.errno != errno.EEXIST:
-                    raise
+            if e.errno != errno.EEXIST:
+                raise
         try:
-            self.plt.savefig('C:/SECMDRX/frames/difractogram.png', bbox_inches='tight')
+            self.plt.savefig('C:/SECMDRX/reports/frames/difractogram.png', bbox_inches='tight')
         except OSError:
-            mb.showerror('Error','Ocurrio un error en el sistema')
+            mb.showerror('Error', 'Ocurrio un error en el sistema')
 
-
-
-
-
-#p = Patron_U()
-#p.load_data()
-#p.detectar_Picos()
+# p = Patron_U()
+# p.load_data()
+# p.detectar_Picos()

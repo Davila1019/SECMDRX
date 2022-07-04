@@ -6,10 +6,10 @@ import numpy as np
 # Proyeccion cubo
 class Cubo:
 
-    def __init__(self):
-        self.opcion=1
+    def __init__(self,opc):
+        self.opcion=opc
 
-    def cubo1(self, fig, Axes3D):
+    def crear_Cubo(self, fig, Axes3D):
         self.fig=fig
         self.Axes3D = Axes3D
         a = []

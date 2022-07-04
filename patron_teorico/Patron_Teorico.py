@@ -1,6 +1,9 @@
+import errno
 import pprint
 import random
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+import os
+from tkinter import messagebox as mb
 
 class PatronT:
     def __init__(self):
@@ -9,40 +12,35 @@ class PatronT:
         self._angulos_2Theta = []
         self._intensidad = []
         self.contador = 0.0
+        self.plt = None
+        self.plt_dif = None
 
     @property
     def indicesM(self):
-        print("@propiety class method called")
         return self._indices_miller
 
     @indicesM.setter
     def indicesM(self, indiceM):
-        print("@indicesM.setter class method called")
-        self._indices_miller.append(indiceM)
+        self._indices_miller = indiceM
 
     @property
     def angulos(self):
-        print("@propiety class method called")
         return self._angulos_2Theta
 
     @angulos.setter
     def angulos(self, angulo):
-        print("@angulos.setter class method called")
-        self._angulos_2Theta.append(angulo)
+        self._angulos_2Theta = angulo
 
     @property
     def intensidad(self):
-        print("@propiety class method called")
         return self._intensidad
 
     @intensidad.setter
     def intensidad(self, intensidad):
-        print("@intencidad.setter class method called")
-        self._intensidad.append(intensidad)
+        self._intensidad = intensidad
 
     @property
     def pteorico(self):
-        print("@propiety class method called")
         return self._pteorico
 
     def imprimir_pteorico(self):
@@ -50,8 +48,7 @@ class PatronT:
 
     def definir_pteorico(self): # definimos un supuesto patrón de difracción teorico
         while self.contador < 90:
-            aux = random.randint(400, 600)
-            self._pteorico[self.contador] = aux
+            self._pteorico[self.contador] = 0
             self.contador = self.contador + 1
 
     def validar_pteorico(self): #validamos la posicion del angulo e insertamos la intesidad
@@ -72,30 +69,14 @@ class PatronT:
                 i += 1
 
     def graficar_pteorico(self): #metódo para la graficación del difractograma
-        plt.figure(figsize=(9, 6))
-        plt.plot(self._pteorico.keys(),self._pteorico.values())
-        plt.ylabel('Intensidad(u.a.)')
-        plt.xlabel('2'r'$\theta$(grados)')
-        plt.suptitle('Difractograma R-X')
-        self.agregar_indiceM(plt)
-        plt.show()
+        self.plt = Figure(figsize=(4, 4),dpi=100)
+        self.plt_dif = self.plt.add_subplot(111)
+        self.plt_dif.plot(self._pteorico.keys(),self._pteorico.values())
+        self.plt_dif.set_ylabel('Intensidad(u.a.)')
+        self.plt_dif.set_xlabel('2'r'$\theta$(grados)')
+        self.plt_dif.set_title('Difractograma R-X')
+        self.agregar_indiceM(self.plt_dif)
 
 
-p = PatronT()
-p.intensidad = 7144
-p.intensidad = 5046
-p.intensidad = 7656
-p.intensidad = 10156
-p.angulos = 36.7769
-p.angulos = 47.5689
-p.angulos = 79.1986
-p.angulos = 84.3056
-p.indicesM = 101
-p.indicesM = 111
-p.indicesM = 201
-p.indicesM = 301
-p.definir_pteorico()
-p.imprimir_pteorico()
-p.validar_pteorico()
-p.imprimir_pteorico()
-p.graficar_pteorico()
+
+
